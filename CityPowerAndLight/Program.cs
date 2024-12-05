@@ -42,11 +42,10 @@ class Program
         Console.Write("Press enter to continue");
         Console.ReadLine();
 
-        Console.WriteLine("\n--- Reading All Incidents and Searching by Title ---");
+        Console.WriteLine("\n--- Reading All Incidents Sample ---");
 
         Incident[] allIncidents = await incidents.ReadAll();
-        incident = allIncidents.Where(x => x.Title == "Company is bad").ToArray()[0];
-        Console.WriteLine($"Found Incident:\n\tTitle={incident.Title}\n\tDescription={incident.Description}\n\tCustomer Id={incident.CustomerId}\n");
+        allIncidents.Take(5).Select(i => { Console.WriteLine($"Found Incident:\n\tTitle={i.Title}\n\tDescription={i.Description}\n\tCustomer Id={i.CustomerId}\n"); return i; }).ToArray();
 
         Console.Write("Press enter to continue");
         Console.ReadLine();

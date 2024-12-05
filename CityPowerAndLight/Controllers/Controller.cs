@@ -9,7 +9,7 @@ namespace CityPowerAndLight.Controllers
         /**Used to deserialize responses with multiple elements
          * in which value is an array containing all elements.
          */
-        private struct MultiResponse<T>
+        private class MultiResponse<T>
         {
             public T[] value { get; set; }
         }
