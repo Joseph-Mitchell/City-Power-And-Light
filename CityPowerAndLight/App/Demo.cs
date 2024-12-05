@@ -1,19 +1,19 @@
-﻿using CityPowerAndLight.Controllers;
+﻿using CityPowerAndLight.Services;
 using CityPowerAndLight.Models;
 
 namespace CityPowerAndLight.App
 {
     internal static class Demo
     {
-        private static Controller<Account> _accounts;
-        private static Controller<Contact> _contacts;
-        private static Controller<Incident> _incidents;
+        private static Service<Account> _accounts;
+        private static Service<Contact> _contacts;
+        private static Service<Incident> _incidents;
 
         private static Account account;
         private static Contact contact1, contact2;
         private static Incident incident;
 
-        public static async Task Run(Controller<Account> accounts, Controller<Contact> contacts, Controller<Incident> incidents)
+        public static async Task Run(Service<Account> accounts, Service<Contact> contacts, Service<Incident> incidents)
         {
             _accounts = accounts;
             _contacts = contacts;

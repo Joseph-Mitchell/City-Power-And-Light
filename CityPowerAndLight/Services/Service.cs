@@ -2,9 +2,9 @@
 using DotNetEnv;
 using System.Text.Json;
 
-namespace CityPowerAndLight.Controllers
+namespace CityPowerAndLight.Services
 {
-    internal class Controller<TModel> where TModel : Model
+    internal class Service<TModel> where TModel : Model
     {
         /**Used to deserialize responses with multiple elements
          * in which value is an array containing all elements.
@@ -17,7 +17,7 @@ namespace CityPowerAndLight.Controllers
         private string _apiUrl;
         private HttpClient _client;
 
-        public Controller(HttpClient client, string urlSuffix)
+        public Service(HttpClient client, string urlSuffix)
         {
             _apiUrl = Env.GetString("API_URL") + urlSuffix;
             _client = client;

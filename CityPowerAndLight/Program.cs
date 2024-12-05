@@ -1,5 +1,5 @@
 ﻿using CityPowerAndLight.App;
-using CityPowerAndLight.Controllers;
+using CityPowerAndLight.Services;
 using CityPowerAndLight.Models;
 using CityPowerAndLight.Utilities;
 using DotNetEnv;
@@ -15,9 +15,9 @@ class Program
             throw new Exception("No environment file was found. It should go in the CityPowerAndLight folder");
 
         HttpClient client = new HttpClient();
-        var accounts = new Controller<Account>(client, "accounts");
-        var contacts = new Controller<Contact>(client, "contacts");
-        var incidents = new Controller<Incident>(client, "incidents");
+        var accounts = new Service<Account>(client, "accounts");
+        var contacts = new Service<Contact>(client, "contacts");
+        var incidents = new Service<Incident>(client, "incidents");
 
         //Give http client token from authorised user to allow modification to the customer service hub app
         string authToken = await Authorisation.Authorise(client);
