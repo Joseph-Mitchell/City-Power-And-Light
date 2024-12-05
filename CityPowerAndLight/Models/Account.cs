@@ -2,7 +2,7 @@
 
 namespace CityPowerAndLight.Models
 {
-    internal class Account
+    internal class Account : Model
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
@@ -12,6 +12,11 @@ namespace CityPowerAndLight.Models
         public Account(string name)
         {
             Name = name;
+        }
+
+        public string GetPayload()
+        {
+            return $"{{name: \"{Name}\"}}";
         }
     }
 }
