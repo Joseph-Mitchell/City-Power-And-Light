@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace CityPowerAndLight
+namespace CityPowerAndLight.Utilities
 {
     internal class Authorisation
     {
