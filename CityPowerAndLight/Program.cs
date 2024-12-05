@@ -10,8 +10,8 @@ class Program
     public static async Task Main(string[] args)
     {
         #region Prep
-        if (!Env.Load("../../../../.env").Any())
-            throw new Exception("No environment file was found. It should go next to the solution file");
+        if (!Env.Load().Any())
+            throw new Exception("No environment file was found. It should go in the CityPowerAndLight folder");
 
         HttpClient client = new HttpClient();
         var accounts = new Controller<Account>(client, "accounts");
