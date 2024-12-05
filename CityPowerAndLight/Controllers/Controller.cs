@@ -40,6 +40,9 @@ namespace CityPowerAndLight.Controllers
 
             var response = await _client.PostAsync(_apiUrl, content);
 
+            if (!response.IsSuccessStatusCode) 
+                throw new Exception(response.StatusCode.ToString());
+
             //Convert http response into an object 
             return await ConvertResponse<TModel>(response);
         }
@@ -48,6 +51,9 @@ namespace CityPowerAndLight.Controllers
         {
             var response = await _client.GetAsync(_apiUrl);
 
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(response.StatusCode.ToString());
+
             //Convert http response into an array of objects
             return (await ConvertResponse<MultiResponse<TModel>>(response)).value;
         }
@@ -55,6 +61,9 @@ namespace CityPowerAndLight.Controllers
         public async Task<TModel> ReadOne(string id)
         {
             var response = await _client.GetAsync(_apiUrl + $"({id})");
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(response.StatusCode.ToString());
 
             //Convert http response into an object
             return await ConvertResponse<TModel>(response);
@@ -67,6 +76,9 @@ namespace CityPowerAndLight.Controllers
 
             var response = await _client.PatchAsync(_apiUrl + $"({id})", content);
 
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(response.StatusCode.ToString());
+
             //Convert http response into an object
             return await ConvertResponse<TModel>(response);
         }
@@ -74,6 +86,9 @@ namespace CityPowerAndLight.Controllers
         public async Task Delete(string id)
         {
             var response = await _client.DeleteAsync(_apiUrl + $"({id})");
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(response.StatusCode.ToString());
         }
     }
 }
