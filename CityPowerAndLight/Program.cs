@@ -1,4 +1,5 @@
-﻿using CityPowerAndLight.Controllers;
+﻿using CityPowerAndLight.App;
+using CityPowerAndLight.Controllers;
 using CityPowerAndLight.Models;
 using CityPowerAndLight.Utilities;
 using DotNetEnv;
@@ -10,7 +11,6 @@ class Program
 {
     public static async Task Main(string[] args)
     {
-        #region Prep
         if (!Env.Load().Any())
             throw new Exception("No environment file was found. It should go in the CityPowerAndLight folder");
 
@@ -25,63 +25,7 @@ class Program
 
         //Instruct api to return data after post and patch calls
         client.DefaultRequestHeaders.Add("Prefer", "return=representation");
-        #endregion
 
-        #region Demo
-        Console.WriteLine("--- Creating Account, Contact and Case (Incident) ---");
-        Account account = await accounts.Create(new Account("Bad Company"));
-        Console.WriteLine($"Account created:\n\tName={account.Name}\n");
-
-        Contact contact1 = await contacts.Create(new Contact("John", "Badman", account.Id));
-        Console.WriteLine($"Contact created:\n\tName={contact1.FirstName} {contact1.Lastname}\n\tAccount Id={contact1.AccountId}\n");
-        Contact contact2 = await contacts.Create(new Contact("Jane", "Goodman", account.Id));
-        Console.WriteLine($"Contact created:\n\tName={contact2.FirstName} {contact2.Lastname}\n\tAccount Id={contact2.AccountId}\n");
-
-        Incident incident = await incidents.Create(new Incident("Company is bad", "I don't like that the company is bad :(", contact1.Id));
-        Console.WriteLine($"Incident created:\n\tTitle={incident.Title}\n\tDescription={incident.Description}\n\tCustomer Id={incident.CustomerId}\n");
-
-        Console.Write("Press enter to continue");
-        Console.ReadLine();
-
-        Console.WriteLine("\n--- Reading All Incidents Sample ---");
-
-        Incident[] allIncidents = await incidents.ReadAll();
-        allIncidents.Take(5).Select(i => { Console.WriteLine($"Found Incident:\n\tTitle={i.Title}\n\tDescription={i.Description}\n\tCustomer Id={i.CustomerId}\n"); return i; }).ToArray();
-
-        Console.Write("Press enter to continue");
-        Console.ReadLine();
-
-        Console.WriteLine("\n--- Reading Specific Incident by Id ---");
-
-        incident = await incidents.ReadOne(incident.Id);
-        Console.WriteLine($"Found Incident:\n\tTitle={incident.Title}\n\tDescription={incident.Description}\n\tCustomer Id={incident.CustomerId}\n");
-
-        Console.Write("Press enter to continue");
-        Console.ReadLine();
-
-        Console.WriteLine("\n--- Updating Incident ---");
-
-        incident.Title = "Company is good";
-        incident.Description = "I like that the company is good :)";
-        incident = await incidents.Update(incident.Id, incident);
-        Console.WriteLine($"Updated Incident:\n\tTitle={incident.Title}\n\tDescription={incident.Description}\n\tCustomer Id={incident.CustomerId}\n");
-
-        Console.Write("Press enter to continue");
-        Console.ReadLine();
-
-        Console.WriteLine("\n--- Deleting Incident ---");
-
-        await incidents.Delete(incident.Id);
-        Console.WriteLine("Deleted Incident");
-
-        Console.Write("Press enter to cleanup and finish");
-        Console.ReadLine();
-
-        await contacts.Delete(contact1.Id);
-        await contacts.Delete(contact2.Id);
-        await accounts.Delete(account.Id);
-
-        Console.WriteLine("\nFinished");
-        #endregion
+        await Demo.Run(accounts, contacts, incidents);
     }
 }
