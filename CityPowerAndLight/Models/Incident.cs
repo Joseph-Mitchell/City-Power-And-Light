@@ -2,7 +2,7 @@
 
 namespace CityPowerAndLight.Models
 {
-    internal class Incident
+    internal class Incident : Model
     {
         [JsonPropertyName("title")]
         public string Title { get; set; }
@@ -18,6 +18,11 @@ namespace CityPowerAndLight.Models
             Title = title;
             Description = description;
             CustomerId = customerId;
+        }
+
+        public string GetPayload()
+        {
+            return $"{{title: \"{Title}\",description: \"{Description}\",\"customerid_contact@odata.bind\": \"contacts({CustomerId})\"}}";
         }
     }
 }
