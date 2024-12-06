@@ -52,16 +52,16 @@ namespace CityPowerAndLight.App
         {
             Printer.PrintHeading("Creating Account, Contact and Case (Incident)");
 
-            account = await _accounts.Create(new Account("Bad Company"));
+            account = await _accounts.Create(new Account("Bad Company", "111-222-3333", "Edinburgh"));
             Printer.PrintModel("Account Created", account);
 
-            contact1 = await _contacts.Create(new Contact("John", "Badman", account.Id));
+            contact1 = await _contacts.Create(new Contact("John", "Badman", "johnbadman@badcompany.com", "444-555-6666", account.Id));
             Printer.PrintModel("Contact created", contact1);
 
-            contact2 = await _contacts.Create(new Contact("Jane", "Goodman", account.Id));
+            contact2 = await _contacts.Create(new Contact("Jane", "Goodman", "janegoodman@badcompany.com", "777-888-9999", account.Id));
             Printer.PrintModel("Contact created", contact2);
 
-            incident = await _incidents.Create(new Incident("Company is bad", "I don't like that the company is bad :(", contact1.Id));
+            incident = await _incidents.Create(new Incident("Company is bad", "I don't like that the company is bad :(", Priority.High, contact1.Id));
             Printer.PrintModel("Incident created", incident);
 
             Printer.PromptContinue("Press enter to continue");
@@ -96,6 +96,8 @@ namespace CityPowerAndLight.App
 
             incident.Title = "Company is good";
             incident.Description = "I like that the company is good :)";
+            incident.Priority = Priority.Low;
+            incident.CustomerId = contact2.Id;
             incident = await _incidents.Update(incident.Id, incident);
             Printer.PrintModel("Updated Incident", incident);
 
