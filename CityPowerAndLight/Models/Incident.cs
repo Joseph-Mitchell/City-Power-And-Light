@@ -34,5 +34,10 @@ namespace CityPowerAndLight.Models
         {
             return $"{{title: \"{Title}\",description: \"{Description}\",prioritycode: \"{(int)Priority}\",\"customerid_contact@odata.bind\": \"contacts({CustomerId})\"}}";
         }
+
+        public static string GeneratePayload(string title, string description, Priority priority, string customerId)
+        {
+            return $"{{title: \"{title}\",description: \"{description}\",prioritycode: \"{(int)priority}\",\"customerid_contact@odata.bind\": \"contacts({customerId})\"}}";
+        }
     }
 }

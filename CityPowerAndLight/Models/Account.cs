@@ -20,6 +20,11 @@ namespace CityPowerAndLight.Models
             City = city;
         }
 
+        public static string GeneratePayload(string name, string phone, string city)
+        {
+            return $"{{name: \"{name}\", telephone1: \"{phone}\", address1_city: \"{city}\"}}";
+        }
+
         public string GetPayload()
         {
             return $"{{name: \"{Name}\", telephone1: \"{Phone}\", address1_city: \"{City}\"}}";

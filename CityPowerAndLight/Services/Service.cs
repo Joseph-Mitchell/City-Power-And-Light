@@ -35,10 +35,10 @@ namespace CityPowerAndLight.Services
             return JsonSerializer.Deserialize<T>(messageString);
         }
 
-        public async Task<TModel> Create(TModel model)
+        public async Task<TModel> Create(string payload)
         {
             //Convert json payload into compatible content for request
-            var content = new StringContent(model.GetPayload(), System.Text.Encoding.UTF8, "application/json");
+            var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
 
             var response = await _client.PostAsync(_apiUrl + _apiQuery, content);
 
@@ -71,10 +71,10 @@ namespace CityPowerAndLight.Services
             return await ConvertResponse<TModel>(response);
         }
 
-        public async Task<TModel> Update(string id, TModel model)
+        public async Task<TModel> Update(string id, string payload)
         {
             //Convert json payload into compatible content for request
-            var content = new StringContent(model.GetPayload(), System.Text.Encoding.UTF8, "application/json");
+            var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
 
             var response = await _client.PatchAsync(_apiUrl + $"({id})" + _apiQuery, content);
 

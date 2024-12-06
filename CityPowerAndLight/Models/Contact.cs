@@ -30,5 +30,10 @@ namespace CityPowerAndLight.Models
         {
             return $"{{firstname: \"{FirstName}\",lastname: \"{Lastname}\",emailaddress1: \"{Email}\",telephone1: \"{Phone}\",\"parentcustomerid_account@odata.bind\": \"accounts({AccountId})\"}}";
         }
+
+        public static string GeneratePayload(string firstName, string lastName, string email, string phone, string accountId)
+        {
+            return $"{{firstname: \"{firstName}\",lastname: \"{lastName}\",emailaddress1: \"{email}\",telephone1: \"{phone}\",\"parentcustomerid_account@odata.bind\": \"accounts({accountId})\"}}";
+        }
     }
 }
