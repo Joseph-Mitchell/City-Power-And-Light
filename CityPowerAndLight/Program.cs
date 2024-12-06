@@ -15,9 +15,9 @@ class Program
             throw new Exception("No environment file was found. It should go in the CityPowerAndLight folder");
 
         HttpClient client = new HttpClient();
-        var accounts = new Service<Account>(client, "accounts");
-        var contacts = new Service<Contact>(client, "contacts");
-        var incidents = new Service<Incident>(client, "incidents");
+        var accounts = new Service<Account>(client, "accounts", "?$select=name,telephone1,address1_city,accountid");
+        var contacts = new Service<Contact>(client, "contacts", "?$select=firstname,lastname,emailaddress1,telephone1,_parentcustomerid_value,contactid");
+        var incidents = new Service<Incident>(client, "incidents", "?$select=title,description,prioritycode,_customerid_value,incidentid");
 
         //Give http client token from authorised user to allow modification to the customer service hub app
         string authToken = await Authorisation.Authorise(client);

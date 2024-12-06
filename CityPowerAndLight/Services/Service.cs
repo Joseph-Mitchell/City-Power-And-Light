@@ -15,11 +15,13 @@ namespace CityPowerAndLight.Services
         }
 
         private string _apiUrl;
+        private string _apiQuery;
         private HttpClient _client;
 
-        public Service(HttpClient client, string urlSuffix)
+        public Service(HttpClient client, string urlSuffix, string query)
         {
             _apiUrl = Env.GetString("API_URL") + urlSuffix;
+            _apiQuery = query;
             _client = client;
         }
 
@@ -38,7 +40,7 @@ namespace CityPowerAndLight.Services
             //Convert json payload into compatible content for request
             var content = new StringContent(model.GetPayload(), System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync(_apiUrl, content);
+            var response = await _client.PostAsync(_apiUrl + _apiQuery, content);
 
             if (!response.IsSuccessStatusCode) 
                 throw new Exception(response.StatusCode.ToString());
@@ -49,7 +51,7 @@ namespace CityPowerAndLight.Services
 
         public async Task<TModel[]> ReadAll()
         {
-            var response = await _client.GetAsync(_apiUrl);
+            var response = await _client.GetAsync(_apiUrl + _apiQuery);
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception(response.StatusCode.ToString());
@@ -60,7 +62,7 @@ namespace CityPowerAndLight.Services
 
         public async Task<TModel> ReadOne(string id)
         {
-            var response = await _client.GetAsync(_apiUrl + $"({id})");
+            var response = await _client.GetAsync(_apiUrl + $"({id})" + _apiQuery);
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception(response.StatusCode.ToString());
@@ -74,7 +76,7 @@ namespace CityPowerAndLight.Services
             //Convert json payload into compatible content for request
             var content = new StringContent(model.GetPayload(), System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _client.PatchAsync(_apiUrl + $"({id})", content);
+            var response = await _client.PatchAsync(_apiUrl + $"({id})" + _apiQuery, content);
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception(response.StatusCode.ToString());

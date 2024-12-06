@@ -119,7 +119,7 @@ namespace CityPowerAndLight.App
             await _contacts.Delete(contact2.Id);
             await _accounts.Delete(account.Id);
 
-            Printer.PromptContinue("Finished");
+            Printer.PromptContinue("Finished. Press enter to complete program");
         }
     }
 }
