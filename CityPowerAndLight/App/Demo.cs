@@ -1,5 +1,6 @@
 ﻿using CityPowerAndLight.Services;
 using CityPowerAndLight.Models;
+using CityPowerAndLight.View;
 
 namespace CityPowerAndLight.App
 {
@@ -43,78 +44,71 @@ namespace CityPowerAndLight.App
                 if (account != null)
                     await accounts.Delete(account.Id);
 
-                Console.WriteLine("An error occurred: " + ex.Message);
-                Console.ReadLine();
+                Printer.PromptContinue("An error occurred: " + ex.Message);
             }
         }
 
         private static async Task CreateModels()
         {
-            Console.WriteLine("--- Creating Account, Contact and Case (Incident) ---");
+            Printer.PrintHeading("Creating Account, Contact and Case (Incident)");
 
             account = await _accounts.Create(new Account("Bad Company"));
-            Console.WriteLine($"Account created:\n\tName={account.Name}\n");
+            Printer.PrintModel("Account Created", account);
 
             contact1 = await _contacts.Create(new Contact("John", "Badman", account.Id));
-            Console.WriteLine($"Contact created:\n\tName={contact1.FirstName} {contact1.Lastname}\n\tAccount Id={contact1.AccountId}\n");
+            Printer.PrintModel("Contact created", contact1);
 
             contact2 = await _contacts.Create(new Contact("Jane", "Goodman", account.Id));
-            Console.WriteLine($"Contact created:\n\tName={contact2.FirstName} {contact2.Lastname}\n\tAccount Id={contact2.AccountId}\n");
+            Printer.PrintModel("Contact created", contact2);
 
             incident = await _incidents.Create(new Incident("Company is bad", "I don't like that the company is bad :(", contact1.Id));
-            Console.WriteLine($"Incident created:\n\tTitle={incident.Title}\n\tDescription={incident.Description}\n\tCustomer Id={incident.CustomerId}\n");
+            Printer.PrintModel("Incident created", incident);
 
-            Console.Write("Press enter to continue");
-            Console.ReadLine();
+            Printer.PromptContinue("Press enter to continue");
         }
 
         private static async Task ReadAllIncidents()
         {
-            Console.WriteLine("\n--- Reading All Incidents Sample ---");
+            Printer.PrintHeading("Reading All Incidents Sample");
 
             Incident[] allIncidents = await _incidents.ReadAll();
             allIncidents.Take(5).Select(i => 
-            { 
-                Console.WriteLine($"Found Incident:\n\tTitle={i.Title}\n\tDescription={i.Description}\n\tCustomer Id={i.CustomerId}\n"); return i; 
+            {
+                Printer.PrintModel("Found Incident", i); return i; 
             }).ToArray();
 
-            Console.Write("Press enter to continue");
-            Console.ReadLine();
+            Printer.PromptContinue("Press enter to continue");
         }
 
         private static async Task ReadOneIncident()
         {
-            Console.WriteLine("\n--- Reading Specific Incident by Id ---");
+            Printer.PrintHeading("Reading Specific Incident by Id");
 
             Incident readIncident = await _incidents.ReadOne(incident.Id);
-            Console.WriteLine($"Found Incident:\n\tTitle={readIncident.Title}\n\tDescription={readIncident.Description}\n\tCustomer Id={readIncident.CustomerId}\n");
+            Printer.PrintModel("Found Incident", readIncident);
 
-            Console.Write("Press enter to continue");
-            Console.ReadLine();
+            Printer.PromptContinue("Press enter to continue");
         }
 
         private static async Task UpdateIncident()
         {
-            Console.WriteLine("\n--- Updating Incident ---");
+            Printer.PrintHeading("Updating Incident");
 
             incident.Title = "Company is good";
             incident.Description = "I like that the company is good :)";
             incident = await _incidents.Update(incident.Id, incident);
-            Console.WriteLine($"Updated Incident:\n\tTitle={incident.Title}\n\tDescription={incident.Description}\n\tCustomer Id={incident.CustomerId}\n");
+            Printer.PrintModel("Updated Incident", incident);
 
-            Console.Write("Press enter to continue");
-            Console.ReadLine();
+            Printer.PromptContinue("Press enter to continue");
         }
 
         private static async Task DeleteIncident()
         {
-            Console.WriteLine("\n--- Deleting Incident ---");
-
+            Printer.PrintHeading("Deleting Incident");
             await _incidents.Delete(incident.Id);
             Console.WriteLine("Deleted Incident");
 
-            Console.Write("Press enter to cleanup and finish");
-            Console.ReadLine();
+            Printer.PromptContinue("Press enter to cleanup and finish");
         }
 
         private static async Task Cleanup()
@@ -123,8 +117,7 @@ namespace CityPowerAndLight.App
             await _contacts.Delete(contact2.Id);
             await _accounts.Delete(account.Id);
 
-            Console.WriteLine("\nFinished");
-            Console.ReadLine();
+            Printer.PromptContinue("Finished");
         }
     }
 }
