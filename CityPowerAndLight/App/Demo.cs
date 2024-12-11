@@ -52,16 +52,38 @@ namespace CityPowerAndLight.App
         {
             Printer.PrintHeading("Creating Account, Contact and Case (Incident)");
 
-            account = await _accountService.Create(Account.GeneratePayload("Bad Company", "111-222-3333", "Edinburgh"));
+            StringContent content;
+
+            content = new StringContent(
+                Account.GeneratePayload("Bad Company", "111-222-3333", "Edinburgh"), 
+                System.Text.Encoding.UTF8, 
+                "application/json"
+            );
+            account = await _accountService.Create(content);
             Printer.PrintModel("Account Created", account);
 
-            contact1 = await _contactService.Create(Contact.GeneratePayload("John", "Badman", "johnbadman@badcompany.com", "444-555-6666", account.Id));
+            content = new StringContent(
+                Contact.GeneratePayload("John", "Badman", "johnbadman@badcompany.com", "444-555-6666", account.Id),
+                System.Text.Encoding.UTF8,
+                "application/json"
+            );
+            contact1 = await _contactService.Create(content);
             Printer.PrintModel("Contact created", contact1);
 
-            contact2 = await _contactService.Create(Contact.GeneratePayload("Jane", "Goodman", "janegoodman@badcompany.com", "777-888-9999", account.Id));
+            content = new StringContent(
+                Contact.GeneratePayload("Jane", "Goodman", "janegoodman@badcompany.com", "777-888-9999", account.Id),
+                System.Text.Encoding.UTF8,
+                "application/json"
+            );
+            contact2 = await _contactService.Create(content);
             Printer.PrintModel("Contact created", contact2);
 
-            incident = await _incidentService.Create(Incident.GeneratePayload("Company is bad", "I don't like that the company is bad :(", Priority.High, contact1.Id));
+            content = new StringContent(
+                Incident.GeneratePayload("Company is bad", "I don't like that the company is bad :(", Priority.High, contact1.Id),
+                System.Text.Encoding.UTF8,
+                "application/json"
+            );
+            incident = await _incidentService.Create(content);
             Printer.PrintModel("Incident created", incident);
 
             Printer.PromptContinue("Press enter to continue");
@@ -98,7 +120,13 @@ namespace CityPowerAndLight.App
             incident.Description = "I like that the company is good :)";
             incident.Priority = Priority.Low;
             incident.CustomerId = contact2.Id;
-            incident = await _incidentService.Update(incident.Id, incident.GetPayload());
+
+            StringContent content = new StringContent(
+                incident.GetPayload(),
+                System.Text.Encoding.UTF8,
+                "application/json"
+            );
+            incident = await _incidentService.Update(incident.Id, content);
             Printer.PrintModel("Updated Incident", incident);
 
             Printer.PromptContinue("Press enter to continue");

@@ -35,11 +35,8 @@ namespace CityPowerAndLight.Services
             return JsonSerializer.Deserialize<T>(messageString);
         }
 
-        public async Task<TModel> Create(string payload)
+        public async Task<TModel> Create(StringContent content)
         {
-            //Convert json payload into compatible content for request
-            var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
-
             var response = await _client.PostAsync(_apiUrl + _apiQuery, content);
 
             if (!response.IsSuccessStatusCode) 
@@ -71,11 +68,8 @@ namespace CityPowerAndLight.Services
             return await ConvertResponse<TModel>(response);
         }
 
-        public async Task<TModel> Update(string id, string payload)
+        public async Task<TModel> Update(string id, StringContent content)
         {
-            //Convert json payload into compatible content for request
-            var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
-
             var response = await _client.PatchAsync(_apiUrl + $"({id})" + _apiQuery, content);
 
             if (!response.IsSuccessStatusCode)
