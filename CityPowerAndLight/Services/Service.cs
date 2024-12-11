@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace CityPowerAndLight.Services
 {
-    internal class Service<TModel> where TModel : Model
+    public class Service<TModel> where TModel : Model
     {
         /**Used to deserialize responses with multiple elements
          * in which value is an array containing all elements.
