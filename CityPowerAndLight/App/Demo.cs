@@ -6,19 +6,19 @@ namespace CityPowerAndLight.App
 {
     internal static class Demo
     {
-        private static Service<Account> _accounts;
-        private static Service<Contact> _contacts;
-        private static Service<Incident> _incidents;
+        private static Service<Account> _accountService;
+        private static Service<Contact> _contactService;
+        private static Service<Incident> _incidentService;
 
         private static Account account;
         private static Contact contact1, contact2;
         private static Incident incident;
 
-        public static async Task Run(Service<Account> accounts, Service<Contact> contacts, Service<Incident> incidents)
+        public static async Task Run(Service<Account> accountService, Service<Contact> contactService, Service<Incident> incidentService)
         {
-            _accounts = accounts;
-            _contacts = contacts;
-            _incidents = incidents;
+            _accountService = accountService;
+            _contactService = contactService;
+            _incidentService = incidentService;
 
             try
             {
@@ -33,16 +33,16 @@ namespace CityPowerAndLight.App
             { 
 
                 if (incident != null)
-                    await incidents.Delete(incident.Id);
+                    await incidentService.Delete(incident.Id);
 
                 if (contact1 != null)
-                    await contacts.Delete(contact1.Id);
+                    await contactService.Delete(contact1.Id);
 
                 if (contact2 != null)
-                    await contacts.Delete(contact2.Id);
+                    await contactService.Delete(contact2.Id);
 
                 if (account != null)
-                    await accounts.Delete(account.Id);
+                    await accountService.Delete(account.Id);
 
                 Printer.PromptContinue("An error occurred: " + ex.Message);
             }
@@ -52,16 +52,16 @@ namespace CityPowerAndLight.App
         {
             Printer.PrintHeading("Creating Account, Contact and Case (Incident)");
 
-            account = await _accounts.Create(Account.GeneratePayload("Bad Company", "111-222-3333", "Edinburgh"));
+            account = await _accountService.Create(Account.GeneratePayload("Bad Company", "111-222-3333", "Edinburgh"));
             Printer.PrintModel("Account Created", account);
 
-            contact1 = await _contacts.Create(Contact.GeneratePayload("John", "Badman", "johnbadman@badcompany.com", "444-555-6666", account.Id));
+            contact1 = await _contactService.Create(Contact.GeneratePayload("John", "Badman", "johnbadman@badcompany.com", "444-555-6666", account.Id));
             Printer.PrintModel("Contact created", contact1);
 
-            contact2 = await _contacts.Create(Contact.GeneratePayload("Jane", "Goodman", "janegoodman@badcompany.com", "777-888-9999", account.Id));
+            contact2 = await _contactService.Create(Contact.GeneratePayload("Jane", "Goodman", "janegoodman@badcompany.com", "777-888-9999", account.Id));
             Printer.PrintModel("Contact created", contact2);
 
-            incident = await _incidents.Create(Incident.GeneratePayload("Company is bad", "I don't like that the company is bad :(", Priority.High, contact1.Id));
+            incident = await _incidentService.Create(Incident.GeneratePayload("Company is bad", "I don't like that the company is bad :(", Priority.High, contact1.Id));
             Printer.PrintModel("Incident created", incident);
 
             Printer.PromptContinue("Press enter to continue");
@@ -71,7 +71,7 @@ namespace CityPowerAndLight.App
         {
             Printer.PrintHeading("Reading All Incidents Sample");
 
-            Incident[] allIncidents = await _incidents.ReadAll();
+            Incident[] allIncidents = await _incidentService.ReadAll();
             allIncidents.Take(5).Select(i => 
             {
                 Printer.PrintModel("Found Incident", i); return i; 
@@ -84,7 +84,7 @@ namespace CityPowerAndLight.App
         {
             Printer.PrintHeading("Reading Specific Incident by Id");
 
-            Incident readIncident = await _incidents.ReadOne(incident.Id);
+            Incident readIncident = await _incidentService.ReadOne(incident.Id);
             Printer.PrintModel("Found Incident", readIncident);
 
             Printer.PromptContinue("Press enter to continue");
@@ -98,7 +98,7 @@ namespace CityPowerAndLight.App
             incident.Description = "I like that the company is good :)";
             incident.Priority = Priority.Low;
             incident.CustomerId = contact2.Id;
-            incident = await _incidents.Update(incident.Id, incident.GetPayload());
+            incident = await _incidentService.Update(incident.Id, incident.GetPayload());
             Printer.PrintModel("Updated Incident", incident);
 
             Printer.PromptContinue("Press enter to continue");
@@ -107,7 +107,7 @@ namespace CityPowerAndLight.App
         private static async Task DeleteIncident()
         {
             Printer.PrintHeading("Deleting Incident");
-            await _incidents.Delete(incident.Id);
+            await _incidentService.Delete(incident.Id);
             Console.WriteLine("Deleted Incident");
 
             Printer.PromptContinue("Press enter to cleanup and finish");
@@ -115,9 +115,9 @@ namespace CityPowerAndLight.App
 
         private static async Task Cleanup()
         {
-            await _contacts.Delete(contact1.Id);
-            await _contacts.Delete(contact2.Id);
-            await _accounts.Delete(account.Id);
+            await _contactService.Delete(contact1.Id);
+            await _contactService.Delete(contact2.Id);
+            await _accountService.Delete(account.Id);
 
             Printer.PromptContinue("Finished. Press enter to complete program");
         }
